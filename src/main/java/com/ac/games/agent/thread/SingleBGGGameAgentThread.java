@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author ac010168
  *
  */
-public class BGGGameAgentThread extends BackgroundAgentThread {
+public class SingleBGGGameAgentThread extends BackgroundAgentThread {
   
   /** Service access point */
   public final static String SERVICE_ROOT = "/external/bggdata";
@@ -36,12 +36,14 @@ public class BGGGameAgentThread extends BackgroundAgentThread {
   public final static String PARAM_LIST   = "?bggid=<gameID>";
   /** Parameter Replace Tag */
   public final static String REPLACE_TAG  = "<gameID>";
+  /** Parameter for addition of batch size parameter */
+  public final static String BATCH_PARAM  = "&batch=20";
 
-  public BGGGameAgentThread() {
+  public SingleBGGGameAgentThread() {
     super();
   }
   
-  public BGGGameAgentThread(long startID, long stopID) {
+  public SingleBGGGameAgentThread(long startID, long stopID) {
     super(startID, stopID);
   }
   
@@ -98,7 +100,10 @@ public class BGGGameAgentThread extends BackgroundAgentThread {
       headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
       HttpEntity<String> request = new HttpEntity<String>(headers);
       
-      for (long curID : gamesToSearch) {
+      
+      for (int pos = 0; pos < gamesToSearch.size(); pos++) {
+        long curID = gamesToSearch.get(pos);
+        
         System.out.println ("Processing BGG ID: " + curID);
         
         String url = GamesAgent.serverAddress + SERVICE_ROOT + PARAM_LIST.replace(REPLACE_TAG, "" + curID);
@@ -108,12 +113,12 @@ public class BGGGameAgentThread extends BackgroundAgentThread {
         BGGGame game = null;
         SimpleErrorData data = null;
         
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
-        String responseBody = response.getBody();
-        
         try {
-          if (responseBody.contains("\"Game Not Found\"")) {
-              data = mapper.readValue(responseBody, SimpleErrorData.class);
+          ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
+          String responseBody = response.getBody();
+          
+          if (responseBody.contains("\"errorType\"") && responseBody.contains("\"errorMessage\"")) {
+            data = mapper.readValue(responseBody, SimpleErrorData.class);
           } else {
             game = mapper.readValue(responseBody, BGGGame.class);
           }
@@ -124,9 +129,17 @@ public class BGGGameAgentThread extends BackgroundAgentThread {
           jme.printStackTrace();
         } catch (IOException ioe) {
           ioe.printStackTrace();
+        } catch (Throwable t) {
+          System.out.println ("Something else bad happened here: " + t.getMessage());
+          failCount++;
+          if (failCount >= 10) {
+            System.out.println ("That's it!  I'm out.  Game ID: " + curID + " could not be processed!");
+            return;
+          }
         }
 
         if (game != null) {
+          failCount = 0;
           System.out.println ("  I'm looking at game: " + game.getName());
           
           //Now we should upload this game, since it doesn't exist.
@@ -142,9 +155,25 @@ public class BGGGameAgentThread extends BackgroundAgentThread {
           }
         }
         else if (data != null) {
+          failCount = 0;
           System.out.println ("  I had a problem: ");
           System.out.println ("    Error Type:    " + data.getErrorType());
           System.out.println ("    Error Message: " + data.getErrorMessage());
+          
+          if (data.getErrorType().equalsIgnoreCase("Server Timeout 503")) {
+            System.out.println ("Looks like I've been a pest.  Time to sleep it off (60 seconds)");
+            pos--;
+            try { Thread.sleep(60000); } catch (Throwable t) {}
+          }
+        } else {
+          System.out.println ("I couldn't get the game I wanted to find...");
+          failCount++;
+          System.out.println ("  The current failCount is now " + failCount);
+          
+          if (failCount == 10) {
+            System.out.println ("I'm out of here.  Too many failures.");
+            return;
+          }
         }
         
       }

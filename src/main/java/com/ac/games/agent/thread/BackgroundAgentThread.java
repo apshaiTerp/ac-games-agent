@@ -12,6 +12,8 @@ public abstract class BackgroundAgentThread extends Thread {
   
   protected int failCount;
   
+  protected int notFoundCount;
+  
   public BackgroundAgentThread() {
     startID   = 0;
     stopID    = 0;

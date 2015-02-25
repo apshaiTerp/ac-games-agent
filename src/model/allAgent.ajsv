@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--AgileJ Ltd. (http://www.agilej.com)-->
+<ajsv>
+    <diagram creationDate="2015-Feb-25 03:31" filterScript="" licenseGrade="single" licenseeName="Adam_Carter" licenseeOrganization="Personal" version="1.7.17.v20140508-2136">
+        <class className="com.ac.games.agent.GamesAgent" project="ac-games-agent" xLocation="1163" yLocation="288"/>
+        <class className="com.ac.games.agent.thread.BackgroundAgentThread" project="ac-games-agent" xLocation="693" yLocation="100"/>
+        <class className="com.ac.games.agent.thread.BatchBGGGameAgentThread" project="ac-games-agent" xLocation="1049" yLocation="519"/>
+        <class className="com.ac.games.agent.thread.CSIDataAgentThread" project="ac-games-agent" xLocation="1554" yLocation="524"/>
+        <class className="com.ac.games.agent.thread.MMDataAgentThread" project="ac-games-agent" xLocation="598" yLocation="541"/>
+        <class className="com.ac.games.agent.thread.SingleBGGGameAgentThread" project="ac-games-agent" xLocation="100" yLocation="534"/>
+    </diagram>
+</ajsv>

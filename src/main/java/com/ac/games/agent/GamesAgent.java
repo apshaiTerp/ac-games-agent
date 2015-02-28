@@ -61,7 +61,7 @@ public class GamesAgent {
       e.printStackTrace();
     }
 
-    System.out.println ("Processing Complete!";
+    System.out.println ("Processing Complete!");
   }
 
 }

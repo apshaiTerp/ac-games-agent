@@ -179,7 +179,7 @@ public class BatchBGGGameAgentThread extends BackgroundAgentThread {
           
           if (data.getErrorType().equalsIgnoreCase("Server Timeout 503")) {
             System.out.println ("Looks like I've been a pest.  Time to sleep it off (60 seconds)");
-            curID -= 50;
+            curID -= 20;
             try { Thread.sleep(60000); } catch (Throwable t) {}
           } else if (data.getErrorType().equalsIgnoreCase("Game Not Found")) {
             failCount = 0;
@@ -193,7 +193,7 @@ public class BatchBGGGameAgentThread extends BackgroundAgentThread {
             }
           } else {
             failCount++;
-            curID -= 50;
+            curID -= 20;
             System.out.println ("  The current failCount is now " + failCount);
             
             if (failCount == 10) {
@@ -204,7 +204,7 @@ public class BatchBGGGameAgentThread extends BackgroundAgentThread {
         } else {
           System.out.println ("I couldn't get the game I wanted to find...");
           failCount++;
-          curID -= 50;
+          curID -= 20;
           System.out.println ("  The current failCount is now " + failCount);
           
           if (failCount == 10) {
@@ -212,7 +212,7 @@ public class BatchBGGGameAgentThread extends BackgroundAgentThread {
             return;
           }
         }
-        curID += 50;
+        curID += 20;
       }//end while
     }
   }

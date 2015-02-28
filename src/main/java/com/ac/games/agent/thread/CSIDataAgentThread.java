@@ -10,7 +10,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.ac.games.agent.GamesAgent;
@@ -116,8 +115,8 @@ public class CSIDataAgentThread extends BackgroundAgentThread {
           ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
           String responseBody = response.getBody();
           
-          if (responseBody.contains("\"Game Not Found\"")) {
-              data = mapper.readValue(responseBody, SimpleErrorData.class);
+          if (responseBody.contains("\"errorType\"") && responseBody.contains("\"errorMessage\"")) {
+            data = mapper.readValue(responseBody, SimpleErrorData.class);
           } else {
             game = mapper.readValue(responseBody, CoolStuffIncPriceData.class);
           }
@@ -128,12 +127,6 @@ public class CSIDataAgentThread extends BackgroundAgentThread {
           jme.printStackTrace();
         } catch (IOException ioe) {
           ioe.printStackTrace();
-        } catch (HttpServerErrorException hsee) {
-          System.out.println ("I got an hsee: " + hsee.getMessage());
-          
-          System.out.println ("Attempting to sleep it off (60 seconds)...");
-          pos--;
-          try { Thread.sleep(60000); } catch (Throwable t) {}
         } catch (Throwable t) {
           System.out.println ("Something else bad happened here: " + t.getMessage());
           failCount++;
@@ -145,6 +138,8 @@ public class CSIDataAgentThread extends BackgroundAgentThread {
 
         if (game != null) {
           failCount = 0;
+          notFoundCount = 0;
+          
           System.out.println ("  I'm looking at game: " + game.getTitle());
           
           //Now we should upload this game, since it doesn't exist.
@@ -162,13 +157,32 @@ public class CSIDataAgentThread extends BackgroundAgentThread {
         else if (data != null) {
           failCount = 0;
           System.out.println ("  I had a problem: ");
-          System.out.println ("    Error Type:    " + data.getErrorType());
-          System.out.println ("    Error Message: " + data.getErrorMessage());
+          System.out.println ("  I had a problem: ");
+          System.out.println ("    Error: " + data.getErrorType() + " - " + data.getErrorMessage());
           
           if (data.getErrorType().equalsIgnoreCase("Server Timeout 503")) {
             System.out.println ("Looks like I've been a pest.  Time to sleep it off (60 seconds)");
             pos--;
             try { Thread.sleep(60000); } catch (Throwable t) {}
+          } else if (data.getErrorType().equalsIgnoreCase("Game Not Found")) {
+            failCount = 0;
+            System.out.println ("    This game was not found.");
+            notFoundCount++;
+            System.out.println ("Nothing Found Count: " + notFoundCount);
+
+            if (notFoundCount > 20) {
+              System.out.println ("I think we found too many empty batches.  Exiting now.");
+              return;
+            }
+          } else {
+            failCount++;
+            pos--;
+            System.out.println ("  The current failCount is now " + failCount);
+            
+            if (failCount == 10) {
+              System.out.println ("I'm out of here.  Too many failures.");
+              return;
+            }
           }
         } else {
           System.out.println ("I couldn't get the game I wanted to find...");

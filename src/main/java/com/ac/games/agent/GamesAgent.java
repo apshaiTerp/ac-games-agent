@@ -14,6 +14,8 @@ public class GamesAgent {
 
   public static String serverAddress = "http://localhost:8080/ac-games-restservice-spring-0.1.0-SNAPSHOT";
   
+  public final static int FIRST_CSI_ENTRY = 75069;
+  
   /**
    * This class should kick off agent threads for {@link SingleBGGGameAgentThread},
    * {@link BatchBGGGameAgentThread}, {@link CSIDataAgentThread}, and {@link MMDataAgentThread} loads.
@@ -21,9 +23,9 @@ public class GamesAgent {
    * @param args
    */
   public static void main(String[] args) {
-    serverAddress = "http://localhost:8080/ac-games-restservice-spring-0.1.0-SNAPSHOT/";
+    serverAddress = "http://localhost:8080/ac-games-restservice-spring-0.1.0-SNAPSHOT";
     
-    /***************************************************************/
+    /***************************************************************
     Thread thread1 = new BatchBGGGameAgentThread(501,200000);
     try { 
       thread1.start();
@@ -37,8 +39,8 @@ public class GamesAgent {
     } catch (Throwable t) {
       t.printStackTrace();
     }
-    /***************************************************************
-    Thread thread2 = new CSIDataAgentThread(79050,100000);
+    /***************************************************************/
+    Thread thread2 = new CSIDataAgentThread(75069,180000);
     try { 
       thread2.start();
     } catch (Throwable t) {
@@ -55,8 +57,8 @@ public class GamesAgent {
     
     try {
       //thread3.join();
-      //thread2.join();
-      thread1.join();
+      thread2.join();
+      //thread1.join();
     } catch (InterruptedException e) {
       e.printStackTrace();
     }

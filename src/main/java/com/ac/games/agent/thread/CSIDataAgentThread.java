@@ -157,7 +157,6 @@ public class CSIDataAgentThread extends BackgroundAgentThread {
         else if (data != null) {
           failCount = 0;
           System.out.println ("  I had a problem: ");
-          System.out.println ("  I had a problem: ");
           System.out.println ("    Error: " + data.getErrorType() + " - " + data.getErrorMessage());
           
           if (data.getErrorType().equalsIgnoreCase("Server Timeout 503")) {
@@ -170,7 +169,7 @@ public class CSIDataAgentThread extends BackgroundAgentThread {
             notFoundCount++;
             System.out.println ("Nothing Found Count: " + notFoundCount);
 
-            if (notFoundCount > 20) {
+            if (notFoundCount > 10000) {
               System.out.println ("I think we found too many empty batches.  Exiting now.");
               return;
             }

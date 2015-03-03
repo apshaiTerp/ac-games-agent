@@ -155,7 +155,6 @@ public class CSIDataAgentThread extends BackgroundAgentThread {
           }
         }
         else if (data != null) {
-          failCount = 0;
           System.out.println ("  I had a problem: ");
           System.out.println ("    Error: " + data.getErrorType() + " - " + data.getErrorMessage());
           

@@ -23,7 +23,7 @@ public class GamesAgent {
    * @param args
    */
   public static void main(String[] args) {
-    serverAddress = "http://localhost:8080/ac-games-restservice-spring-0.1.0-SNAPSHOT";
+    serverAddress = "http://localhost:8080";
     
     /***************************************************************
     Thread thread1 = new BatchBGGGameAgentThread(501,200000);
@@ -40,7 +40,7 @@ public class GamesAgent {
       t.printStackTrace();
     }
     /***************************************************************/
-    Thread thread2 = new CSIDataAgentThread(98500,250000);
+    Thread thread2 = new CSIDataAgentThread(124800,250000);
     try { 
       thread2.start();
     } catch (Throwable t) {

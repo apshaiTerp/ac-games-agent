@@ -48,7 +48,7 @@ public class GamesAgent {
       t.printStackTrace();
     }
     /***************************************************************/
-    Thread thread3 = new MMDataAgentThread(5500,6000);
+    Thread thread3 = new MMDataAgentThread(FIRST_MM_ENTRY,6000);
     try { 
       thread3.start();
     } catch (Throwable t) {

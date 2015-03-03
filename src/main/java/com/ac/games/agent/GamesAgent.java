@@ -40,7 +40,7 @@ public class GamesAgent {
       t.printStackTrace();
     }
     /***************************************************************/
-    Thread thread2 = new CSIDataAgentThread(124800,250000);
+    Thread thread2 = new CSIDataAgentThread(153126,250000);
     try { 
       thread2.start();
     } catch (Throwable t) {

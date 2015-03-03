@@ -16,6 +16,7 @@ public class GamesAgent {
   
   public final static int FIRST_CSI_ENTRY = 75069;
   
+  public final static int FIRST_MM_ENTRY  = 5136;
   /**
    * This class should kick off agent threads for {@link SingleBGGGameAgentThread},
    * {@link BatchBGGGameAgentThread}, {@link CSIDataAgentThread}, and {@link MMDataAgentThread} loads.
@@ -39,14 +40,14 @@ public class GamesAgent {
     } catch (Throwable t) {
       t.printStackTrace();
     }
-    /***************************************************************/
+    /***************************************************************
     Thread thread2 = new CSIDataAgentThread(169580,250000);
     try { 
       thread2.start();
     } catch (Throwable t) {
       t.printStackTrace();
     }
-    /***************************************************************
+    /***************************************************************/
     Thread thread3 = new MMDataAgentThread(5500,6000);
     try { 
       thread3.start();
@@ -56,8 +57,8 @@ public class GamesAgent {
     /***************************************************************/
     
     try {
-      //thread3.join();
-      thread2.join();
+      thread3.join();
+      //thread2.join();
       //thread1.join();
     } catch (InterruptedException e) {
       e.printStackTrace();

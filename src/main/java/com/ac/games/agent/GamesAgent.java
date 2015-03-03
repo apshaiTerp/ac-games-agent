@@ -23,7 +23,7 @@ public class GamesAgent {
    * @param args
    */
   public static void main(String[] args) {
-    serverAddress = "http://localhost:8080";
+    serverAddress = "http://localhost:8080/ac-games-restservice-spring-0.1.0-SNAPSHOT";
     
     /***************************************************************
     Thread thread1 = new BatchBGGGameAgentThread(501,200000);

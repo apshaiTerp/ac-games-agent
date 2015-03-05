@@ -32,7 +32,7 @@ public class CSIScheduledAgentThread extends Thread {
       
       long maxID = -1;
       try {
-        maxID = database.getMaxBGGGameID();
+        maxID = database.getMaxCSIDataID();
       } catch (DatabaseOperationException doe) {
         doe.printStackTrace();
         try { database.closeDBConnection(); } catch (Throwable t) { /** Ignore errors */ }

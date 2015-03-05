@@ -32,7 +32,7 @@ public class MMScheduledAgentThread extends Thread {
       
       long maxID = -1;
       try {
-        maxID = database.getMaxBGGGameID();
+        maxID = database.getMaxMMDataID();
       } catch (DatabaseOperationException doe) {
         doe.printStackTrace();
         try { database.closeDBConnection(); } catch (Throwable t) { /** Ignore errors */ }

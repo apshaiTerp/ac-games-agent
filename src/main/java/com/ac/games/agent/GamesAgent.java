@@ -60,7 +60,8 @@ public class GamesAgent {
     }
     /***************************************************************/
     
-    Thread thread1 = new BGGScheduledAgentThread();
+    //Thread thread1 = new BGGScheduledAgentThread();
+    Thread thread1 = new BatchBGGGameAgentThread(1, 180000);
     Thread thread2 = new CSIScheduledAgentThread();
     Thread thread3 = new MMScheduledAgentThread();
     

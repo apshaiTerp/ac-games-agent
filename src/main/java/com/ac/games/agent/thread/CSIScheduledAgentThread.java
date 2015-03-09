@@ -12,7 +12,7 @@ import com.ac.games.db.exception.DatabaseOperationException;
 public class CSIScheduledAgentThread extends Thread {
   
   private final static long minRangeOffset = 100L;
-  private final static long maxRangeOffset = 500L;
+  private final static long maxRangeOffset = 100L;
   
   public CSIScheduledAgentThread() {
     super();

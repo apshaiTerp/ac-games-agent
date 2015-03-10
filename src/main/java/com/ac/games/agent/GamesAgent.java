@@ -1,5 +1,6 @@
 package com.ac.games.agent;
 
+import com.ac.games.agent.thread.BGGAutoReviewAgentThread;
 import com.ac.games.agent.thread.BGGScheduledAgentThread;
 import com.ac.games.agent.thread.BatchBGGGameAgentThread;
 import com.ac.games.agent.thread.CSIScheduledAgentThread;
@@ -27,8 +28,8 @@ public class GamesAgent {
    * @param args
    */
   public static void main(String[] args) {
-    serverAddress = "http://localhost:8080/ac-games-restservice-spring-0.1.0-SNAPSHOT";
-    //serverAddress = "http://localhost:8080";
+    //serverAddress = "http://localhost:8080/ac-games-restservice-spring-0.1.0-SNAPSHOT";
+    serverAddress = "http://localhost:8080";
     
     /***************************************************************
     Thread thread1 = new BatchBGGGameAgentThread(501,200000);
@@ -61,18 +62,22 @@ public class GamesAgent {
     /***************************************************************/
     
     //Thread thread1 = new BGGScheduledAgentThread();
-    Thread thread1 = new BatchBGGGameAgentThread(1, 180000);
-    Thread thread2 = new CSIScheduledAgentThread();
-    Thread thread3 = new MMScheduledAgentThread();
+    //Thread thread1 = new BatchBGGGameAgentThread(1, 180000);
+    //Thread thread2 = new CSIScheduledAgentThread();
+    //Thread thread3 = new MMScheduledAgentThread();
     
-    thread1.start();
-    thread2.start();
-    thread3.start();
+    //thread1.start();
+    //thread2.start();
+    //thread3.start();
+    
+    Thread thread4 = new BGGAutoReviewAgentThread();
+    thread4.start();
     
     try {
-      thread3.join();
-      thread2.join();
-      thread1.join();
+      //thread1.join();
+      //thread2.join();
+      //thread3.join();
+      thread4.join();
     } catch (InterruptedException e) {
       e.printStackTrace();
     }

@@ -28,8 +28,8 @@ public class GamesAgent {
    * @param args
    */
   public static void main(String[] args) {
-    //serverAddress = "http://localhost:8080/ac-games-restservice-spring-0.1.0-SNAPSHOT";
-    serverAddress = "http://localhost:8080";
+    serverAddress = "http://localhost:8080/ac-games-restservice-spring-0.1.0-SNAPSHOT";
+    //serverAddress = "http://localhost:8080";
     
     /***************************************************************
     Thread thread1 = new BatchBGGGameAgentThread(501,200000);
@@ -45,15 +45,15 @@ public class GamesAgent {
     } catch (Throwable t) {
       t.printStackTrace();
     }
-    /***************************************************************
-    Thread thread2 = new CSIDataAgentThread(169580,250000);
+    /***************************************************************/
+    Thread thread2 = new CSIDataAgentThread(FIRST_CSI_ENTRY,250000);
     try { 
       thread2.start();
     } catch (Throwable t) {
       t.printStackTrace();
     }
-    /***************************************************************
-    Thread thread3 = new MMDataAgentThread(38174,150000);
+    /***************************************************************/
+    Thread thread3 = new MMDataAgentThread(FIRST_MM_ENTRY,150000);
     try { 
       thread3.start();
     } catch (Throwable t) {
@@ -63,12 +63,12 @@ public class GamesAgent {
     
     Thread thread1 = new BGGScheduledAgentThread();
     //Thread thread1 = new BatchBGGGameAgentThread(40000, 180000);
-    Thread thread2 = new CSIScheduledAgentThread();
-    Thread thread3 = new MMScheduledAgentThread();
+    //Thread thread2 = new CSIScheduledAgentThread();
+    //Thread thread3 = new MMScheduledAgentThread();
     
     thread1.start();
-    thread2.start();
-    thread3.start();
+    //thread2.start();
+    //thread3.start();
     try {
       thread1.join();
       thread2.join();

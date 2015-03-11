@@ -61,22 +61,26 @@ public class GamesAgent {
     }
     /***************************************************************/
     
-    //Thread thread1 = new BGGScheduledAgentThread();
-    //Thread thread1 = new BatchBGGGameAgentThread(1, 180000);
-    //Thread thread2 = new CSIScheduledAgentThread();
-    //Thread thread3 = new MMScheduledAgentThread();
+    Thread thread1 = new BGGScheduledAgentThread();
+    //Thread thread1 = new BatchBGGGameAgentThread(40000, 180000);
+    Thread thread2 = new CSIScheduledAgentThread();
+    Thread thread3 = new MMScheduledAgentThread();
     
-    //thread1.start();
-    //thread2.start();
-    //thread3.start();
+    thread1.start();
+    thread2.start();
+    thread3.start();
+    try {
+      thread1.join();
+      thread2.join();
+      thread3.join();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
     
     Thread thread4 = new BGGAutoReviewAgentThread();
     thread4.start();
     
     try {
-      //thread1.join();
-      //thread2.join();
-      //thread3.join();
       thread4.join();
     } catch (InterruptedException e) {
       e.printStackTrace();

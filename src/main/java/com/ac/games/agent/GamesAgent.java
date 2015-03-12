@@ -45,14 +45,14 @@ public class GamesAgent {
     } catch (Throwable t) {
       t.printStackTrace();
     }
-    /***************************************************************/
+    /***************************************************************
     Thread thread2 = new CSIDataAgentThread(FIRST_CSI_ENTRY,250000);
     try { 
       thread2.start();
     } catch (Throwable t) {
       t.printStackTrace();
     }
-    /***************************************************************/
+    /***************************************************************
     Thread thread3 = new MMDataAgentThread(FIRST_MM_ENTRY,150000);
     try { 
       thread3.start();
@@ -63,12 +63,12 @@ public class GamesAgent {
     
     Thread thread1 = new BGGScheduledAgentThread();
     //Thread thread1 = new BatchBGGGameAgentThread(40000, 180000);
-    //Thread thread2 = new CSIScheduledAgentThread();
-    //Thread thread3 = new MMScheduledAgentThread();
+    Thread thread2 = new CSIScheduledAgentThread();
+    Thread thread3 = new MMScheduledAgentThread();
     
     thread1.start();
-    //thread2.start();
-    //thread3.start();
+    thread2.start();
+    thread3.start();
     try {
       thread1.join();
       thread2.join();

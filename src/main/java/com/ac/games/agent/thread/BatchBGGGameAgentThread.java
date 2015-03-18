@@ -39,7 +39,7 @@ public class BatchBGGGameAgentThread extends BackgroundAgentThread {
   /** Parameter Replace Tag */
   public final static String REPLACE_TAG  = "<gameID>";
   /** Parameter for addition of batch size parameter */
-  public final static String BATCH_PARAM  = "&batch=20";
+  public final static String BATCH_PARAM  = "&batch=50";
 
   public BatchBGGGameAgentThread(long startID, long stopID) {
     super(startID, stopID);
@@ -139,6 +139,16 @@ public class BatchBGGGameAgentThread extends BackgroundAgentThread {
           failCount = 0;
           System.out.println ("  I got the following number of games back: " + games.size());
           
+          if (games.size() == 0) {
+            notFoundCount++;
+            System.out.println ("Nothing Found Count: " + notFoundCount);
+
+            if (notFoundCount > 20) {
+              System.out.println ("I think we found too many empty batches.  Exiting now.");
+              return;
+            }
+          } else notFoundCount = 0;
+
           for (BGGGame game : games) {
             if (gamesToSearch.contains(game.getBggID())) {
               gamesToSearch.remove(game.getBggID());
@@ -169,14 +179,21 @@ public class BatchBGGGameAgentThread extends BackgroundAgentThread {
           
           if (data.getErrorType().equalsIgnoreCase("Server Timeout 503")) {
             System.out.println ("Looks like I've been a pest.  Time to sleep it off (60 seconds)");
-            curID -= 20;
+            curID -= 50;
             try { Thread.sleep(60000); } catch (Throwable t) {}
           } else if (data.getErrorType().equalsIgnoreCase("Game Not Found")) {
             failCount = 0;
             System.out.println ("    This game was not found.");
+            notFoundCount++;
+            System.out.println ("Nothing Found Count: " + notFoundCount);
+
+            if (notFoundCount > 20) {
+              System.out.println ("I think we found too many empty batches.  Exiting now.");
+              return;
+            }
           } else {
             failCount++;
-            curID -= 20;
+            curID -= 50;
             System.out.println ("  The current failCount is now " + failCount);
             
             if (failCount == 10) {
@@ -187,7 +204,7 @@ public class BatchBGGGameAgentThread extends BackgroundAgentThread {
         } else {
           System.out.println ("I couldn't get the game I wanted to find...");
           failCount++;
-          curID -= 20;
+          curID -= 50;
           System.out.println ("  The current failCount is now " + failCount);
           
           if (failCount == 10) {
@@ -195,7 +212,7 @@ public class BatchBGGGameAgentThread extends BackgroundAgentThread {
             return;
           }
         }
-        curID += 20;
+        curID += 50;
       }//end while
     }
   }

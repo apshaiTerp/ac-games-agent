@@ -60,7 +60,7 @@ public class GamesAgent {
     } catch (Throwable t) {
       t.printStackTrace();
     }
-    /***************************************************************
+    /***************************************************************/
     
     Thread thread1 = new BGGScheduledAgentThread();
     //Thread thread1 = new BatchBGGGameAgentThread(40000, 180000);

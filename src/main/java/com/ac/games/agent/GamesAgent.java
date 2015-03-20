@@ -8,6 +8,7 @@ import com.ac.games.agent.thread.MMScheduledAgentThread;
 import com.ac.games.agent.thread.SingleBGGGameAgentThread;
 import com.ac.games.agent.thread.CSIDataAgentThread;
 import com.ac.games.agent.thread.MMDataAgentThread;
+import com.ac.games.agent.thread.StatsThread;
 
 /**
  * This is the driving Agent class.
@@ -59,7 +60,7 @@ public class GamesAgent {
     } catch (Throwable t) {
       t.printStackTrace();
     }
-    /***************************************************************/
+    /***************************************************************
     
     Thread thread1 = new BGGScheduledAgentThread();
     //Thread thread1 = new BatchBGGGameAgentThread(40000, 180000);
@@ -85,7 +86,16 @@ public class GamesAgent {
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
+    /***************************************************************/
 
+    StatsThread statThread = new StatsThread();
+    statThread.start();
+    try {
+      statThread.join();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    
     System.out.println ("Processing Complete!");
   }
 

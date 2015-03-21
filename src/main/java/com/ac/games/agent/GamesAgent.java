@@ -53,10 +53,11 @@ public class GamesAgent {
     } catch (Throwable t) {
       t.printStackTrace();
     }
-    /***************************************************************
-    Thread thread3 = new MMDataAgentThread(FIRST_MM_ENTRY,150000);
+    /***************************************************************/
+    Thread oldThread3 = new MMDataAgentThread(FIRST_MM_ENTRY,150000);
     try { 
-      thread3.start();
+      oldThread3.start();
+      oldThread3.join();
     } catch (Throwable t) {
       t.printStackTrace();
     }

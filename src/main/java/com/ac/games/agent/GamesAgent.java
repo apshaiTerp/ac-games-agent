@@ -1,9 +1,15 @@
 package com.ac.games.agent;
 
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 import com.ac.games.agent.thread.BGGAutoReviewAgentThread;
 import com.ac.games.agent.thread.BGGScheduledAgentThread;
 import com.ac.games.agent.thread.BatchBGGGameAgentThread;
+import com.ac.games.agent.thread.BatchBGGGameUpdateAgentThread;
+import com.ac.games.agent.thread.CSIDataUpdateAgentThread;
 import com.ac.games.agent.thread.CSIScheduledAgentThread;
+import com.ac.games.agent.thread.MMDataUpdateAgentThread;
 import com.ac.games.agent.thread.MMScheduledAgentThread;
 import com.ac.games.agent.thread.SingleBGGGameAgentThread;
 import com.ac.games.agent.thread.CSIDataAgentThread;
@@ -32,71 +38,29 @@ public class GamesAgent {
     serverAddress = "http://localhost:8080/ac-games-restservice-spring-0.2.0-SNAPSHOT";
     //serverAddress = "http://localhost:8080";
     
-    /***************************************************************
-    Thread thread1 = new BatchBGGGameAgentThread(501,200000);
-    try { 
-      thread1.start();
-    } catch (Throwable t) {
-      t.printStackTrace();
-    }
-    /***************************************************************
-    Thread thread2 = new SingleBGGGameAgentThread(6542,6542);
-    try { 
-      thread2.start();
-    } catch (Throwable t) {
-      t.printStackTrace();
-    }
-    /***************************************************************
-    Thread thread2 = new CSIDataAgentThread(FIRST_CSI_ENTRY,250000);
-    try { 
-      thread2.start();
-    } catch (Throwable t) {
-      t.printStackTrace();
-    }
-    /***************************************************************
-    Thread oldThread3 = new MMDataAgentThread(FIRST_MM_ENTRY,150000);
-    try { 
-      oldThread3.start();
-      oldThread3.join();
-    } catch (Throwable t) {
-      t.printStackTrace();
-    }
-    /***************************************************************/
+    ScheduledThreadPoolExecutor mainTaskPool = new ScheduledThreadPoolExecutor(1);
+    ScheduledThreadPoolExecutor subTaskPool  = new ScheduledThreadPoolExecutor(1);
     
-    Thread thread1 = new BGGScheduledAgentThread();
-    //Thread thread1 = new BatchBGGGameAgentThread(40000, 180000);
-    Thread thread2 = new CSIScheduledAgentThread();
-    Thread thread3 = new MMScheduledAgentThread();
+    //Set the Check for new stuff tasks to run every three hours
+    mainTaskPool.scheduleAtFixedRate(new BGGScheduledAgentThread(), 0, 3, TimeUnit.HOURS);
+    mainTaskPool.scheduleAtFixedRate(new CSIScheduledAgentThread(), 0, 3, TimeUnit.HOURS);
+    mainTaskPool.scheduleAtFixedRate(new MMScheduledAgentThread(), 0, 3, TimeUnit.HOURS);
     
-    thread1.start();
-    thread2.start();
-    thread3.start();
-    try {
-      thread1.join();
-      thread2.join();
-      thread3.join();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
+    //These guys are a little more expensive, so only run them every 48 hours
+    mainTaskPool.scheduleAtFixedRate(new BatchBGGGameUpdateAgentThread(), 1, 48, TimeUnit.HOURS);
+    mainTaskPool.scheduleAtFixedRate(new CSIDataUpdateAgentThread(), 1, 48, TimeUnit.HOURS);
+    mainTaskPool.scheduleAtFixedRate(new MMDataUpdateAgentThread(), 1, 48, TimeUnit.HOURS);
+    
+    //Schedule the stats thread to collect stats every 30 minutes or so
+    subTaskPool.scheduleAtFixedRate(new StatsThread(), 0, 30, TimeUnit.MINUTES);
+    //Schedule the Auto-Review jobs to run every 6 hours
+    subTaskPool.scheduleAtFixedRate(new BGGAutoReviewAgentThread(), 1, 6, TimeUnit.HOURS);
+    
+    while (true) {
+      try {
+        Thread.sleep(10000);
+      } catch (Throwable t) { break; }
     }
-    
-    Thread thread4 = new BGGAutoReviewAgentThread();
-    thread4.start();
-    
-    try {
-      thread4.join();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-    /***************************************************************/
-
-    StatsThread statThread = new StatsThread();
-    statThread.start();
-    try {
-      statThread.join();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-    
     System.out.println ("Processing Complete!");
   }
 

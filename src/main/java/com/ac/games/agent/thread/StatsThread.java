@@ -150,6 +150,7 @@ public class StatsThread extends Thread {
       boardGameQuery                  = new BasicDBObject("category", MiniatureMarketCategoryConverter.convertMMCategoryToFlag(MiniatureMarketCategory.BOARDGAMES));
       BasicDBObject tableTopQuery     = new BasicDBObject("category", MiniatureMarketCategoryConverter.convertMMCategoryToFlag(MiniatureMarketCategory.TABLETOP));
       BasicDBObject ccgQuery          = new BasicDBObject("category", MiniatureMarketCategoryConverter.convertMMCategoryToFlag(MiniatureMarketCategory.CCGS));
+      lcgQuery                        = new BasicDBObject("category", MiniatureMarketCategoryConverter.convertMMCategoryToFlag(MiniatureMarketCategory.LCGS));
       BasicDBObject collectiblesQuery = new BasicDBObject("category", MiniatureMarketCategoryConverter.convertMMCategoryToFlag(MiniatureMarketCategory.COLLECTIBLES));
       rpgQuery                        = new BasicDBObject("category", MiniatureMarketCategoryConverter.convertMMCategoryToFlag(MiniatureMarketCategory.RPGS));
       BasicDBObject accessoriesQuery  = new BasicDBObject("category", MiniatureMarketCategoryConverter.convertMMCategoryToFlag(MiniatureMarketCategory.ACCESSORIES));
@@ -160,6 +161,7 @@ public class StatsThread extends Thread {
       mmStats.setBoardGameCount(mmCollection.find(boardGameQuery).count());
       mmStats.setTableTopCount(mmCollection.find(tableTopQuery).count());
       mmStats.setCcgCount(mmCollection.find(ccgQuery).count());
+      mmStats.setLcgCount(mmCollection.find(lcgQuery).count());
       mmStats.setCollectiblesCount(mmCollection.find(collectiblesQuery).count());
       mmStats.setRpgCount(mmCollection.find(rpgQuery).count());
       mmStats.setAccessoriesCount(mmCollection.find(accessoriesQuery).count());
@@ -173,6 +175,7 @@ public class StatsThread extends Thread {
       System.out.println ("  boardGameCount:    " + mmStats.getBoardGameCount());
       System.out.println ("  tableTopCount:     " + mmStats.getTableTopCount());
       System.out.println ("  ccgCount:          " + mmStats.getCcgCount());
+      System.out.println ("  lcgCount:          " + mmStats.getLcgCount());
       System.out.println ("  collectiblesCount: " + mmStats.getCollectiblesCount());
       System.out.println ("  rpgCount:          " + mmStats.getRpgCount());
       System.out.println ("  accessoriesCount:  " + mmStats.getAccessoriesCount());

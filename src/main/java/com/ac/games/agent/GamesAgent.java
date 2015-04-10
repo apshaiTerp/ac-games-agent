@@ -7,8 +7,10 @@ import com.ac.games.agent.thread.BGGAutoReviewAgentThread;
 import com.ac.games.agent.thread.BGGScheduledAgentThread;
 import com.ac.games.agent.thread.BatchBGGGameAgentThread;
 import com.ac.games.agent.thread.BatchBGGGameUpdateAgentThread;
+import com.ac.games.agent.thread.CSIAutoReviewAgentThread;
 import com.ac.games.agent.thread.CSIDataUpdateAgentThread;
 import com.ac.games.agent.thread.CSIScheduledAgentThread;
+import com.ac.games.agent.thread.MMAutoReviewAgentThread;
 import com.ac.games.agent.thread.MMDataUpdateAgentThread;
 import com.ac.games.agent.thread.MMScheduledAgentThread;
 import com.ac.games.agent.thread.SingleBGGGameAgentThread;
@@ -35,7 +37,7 @@ public class GamesAgent {
    * @param args
    */
   public static void main(String[] args) {
-    serverAddress = "http://localhost:8080/ac-games-restservice-spring-0.2.0-SNAPSHOT";
+    serverAddress = "http://localhost:8080/ac-games-restservice-spring-0.3.0-SNAPSHOT";
     //serverAddress = "http://localhost:8080";
     
     ScheduledThreadPoolExecutor mainTaskPool = new ScheduledThreadPoolExecutor(1);
@@ -47,14 +49,16 @@ public class GamesAgent {
     mainTaskPool.scheduleAtFixedRate(new MMScheduledAgentThread(), 0, 3, TimeUnit.HOURS);
     
     //These guys are a little more expensive, so only run them every 48 hours
-    mainTaskPool.scheduleAtFixedRate(new BatchBGGGameUpdateAgentThread(), 1, 48, TimeUnit.HOURS);
-    mainTaskPool.scheduleAtFixedRate(new CSIDataUpdateAgentThread(), 1, 48, TimeUnit.HOURS);
-    mainTaskPool.scheduleAtFixedRate(new MMDataUpdateAgentThread(), 1, 48, TimeUnit.HOURS);
+    //mainTaskPool.scheduleAtFixedRate(new BatchBGGGameUpdateAgentThread(), 1, 48, TimeUnit.HOURS);
+    //mainTaskPool.scheduleAtFixedRate(new CSIDataUpdateAgentThread(), 1, 48, TimeUnit.HOURS);
+    //mainTaskPool.scheduleAtFixedRate(new MMDataUpdateAgentThread(), 1, 48, TimeUnit.HOURS);
     
     //Schedule the stats thread to collect stats every 30 minutes or so
     subTaskPool.scheduleAtFixedRate(new StatsThread(), 0, 30, TimeUnit.MINUTES);
     //Schedule the Auto-Review jobs to run every 6 hours
     subTaskPool.scheduleAtFixedRate(new BGGAutoReviewAgentThread(), 1, 6, TimeUnit.HOURS);
+    subTaskPool.scheduleAtFixedRate(new CSIAutoReviewAgentThread(), 1, 6, TimeUnit.HOURS);
+    subTaskPool.scheduleAtFixedRate(new MMAutoReviewAgentThread(), 1, 6, TimeUnit.HOURS);
     
     while (true) {
       try {

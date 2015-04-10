@@ -56,9 +56,9 @@ public class GamesAgent {
     //Schedule the stats thread to collect stats every 30 minutes or so
     subTaskPool.scheduleAtFixedRate(new StatsThread(), 0, 30, TimeUnit.MINUTES);
     //Schedule the Auto-Review jobs to run every 6 hours
-    subTaskPool.scheduleAtFixedRate(new BGGAutoReviewAgentThread(), 1, 6, TimeUnit.HOURS);
-    subTaskPool.scheduleAtFixedRate(new CSIAutoReviewAgentThread(), 1, 6, TimeUnit.HOURS);
-    subTaskPool.scheduleAtFixedRate(new MMAutoReviewAgentThread(), 1, 6, TimeUnit.HOURS);
+    subTaskPool.scheduleAtFixedRate(new CSIAutoReviewAgentThread(), 1, 360, TimeUnit.MINUTES);
+    subTaskPool.scheduleAtFixedRate(new MMAutoReviewAgentThread(),  1, 360, TimeUnit.MINUTES);
+    subTaskPool.scheduleAtFixedRate(new BGGAutoReviewAgentThread(), 1, 360, TimeUnit.MINUTES);
     
     while (true) {
       try {

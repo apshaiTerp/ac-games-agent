@@ -6,16 +6,13 @@ import java.util.concurrent.TimeUnit;
 import com.ac.games.agent.thread.BGGAutoReviewAgentThread;
 import com.ac.games.agent.thread.BGGScheduledAgentThread;
 import com.ac.games.agent.thread.BatchBGGGameAgentThread;
-import com.ac.games.agent.thread.BatchBGGGameUpdateAgentThread;
 import com.ac.games.agent.thread.CSIAutoReviewAgentThread;
-import com.ac.games.agent.thread.CSIDataUpdateAgentThread;
+import com.ac.games.agent.thread.CSIDataAgentThread;
 import com.ac.games.agent.thread.CSIScheduledAgentThread;
 import com.ac.games.agent.thread.MMAutoReviewAgentThread;
-import com.ac.games.agent.thread.MMDataUpdateAgentThread;
+import com.ac.games.agent.thread.MMDataAgentThread;
 import com.ac.games.agent.thread.MMScheduledAgentThread;
 import com.ac.games.agent.thread.SingleBGGGameAgentThread;
-import com.ac.games.agent.thread.CSIDataAgentThread;
-import com.ac.games.agent.thread.MMDataAgentThread;
 import com.ac.games.agent.thread.StatsThread;
 
 /**

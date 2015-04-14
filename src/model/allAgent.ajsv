@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--AgileJ Ltd. (http://www.agilej.com)-->
 <ajsv>
-    <diagram creationDate="2015-Feb-25 03:31" filterScript="" licenseGrade="single" licenseeName="Adam_Carter" licenseeOrganization="Personal" version="1.7.17.v20140508-2136">
-        <class className="com.ac.games.agent.GamesAgent" project="ac-games-agent" xLocation="1163" yLocation="288"/>
-        <class className="com.ac.games.agent.thread.BackgroundAgentThread" project="ac-games-agent" xLocation="693" yLocation="100"/>
-        <class className="com.ac.games.agent.thread.BatchBGGGameAgentThread" project="ac-games-agent" xLocation="1049" yLocation="519"/>
-        <class className="com.ac.games.agent.thread.CSIDataAgentThread" project="ac-games-agent" xLocation="1554" yLocation="524"/>
-        <class className="com.ac.games.agent.thread.MMDataAgentThread" project="ac-games-agent" xLocation="598" yLocation="541"/>
-        <class className="com.ac.games.agent.thread.SingleBGGGameAgentThread" project="ac-games-agent" xLocation="100" yLocation="534"/>
+    <diagram creationDate="2015-Apr-13 10:20" filterScript="" licenseGrade="single" licenseeName="Adam_Carter" licenseeOrganization="Personal" version="1.7.17.v20140508-2136">
+        <class className="com.ac.games.agent.test.TestPublisherDump" project="ac-games-agent" xLocation="1999" yLocation="1237"/>
+        <class className="com.ac.games.agent.test.PublisherData" project="ac-games-agent" xLocation="2266" yLocation="231"/>
+        <class className="com.ac.games.agent.GamesAgent" project="ac-games-agent" xLocation="1078" yLocation="941"/>
+        <class className="com.ac.games.agent.data.PreferredPublisherList" project="ac-games-agent" xLocation="2386" yLocation="1148"/>
+        <class className="com.ac.games.agent.thread.BackgroundAgentThread" project="ac-games-agent" xLocation="1246" yLocation="100"/>
+        <class className="com.ac.games.agent.thread.BatchBGGGameAgentThread" project="ac-games-agent" xLocation="1487" yLocation="929"/>
+        <class className="com.ac.games.agent.thread.BatchBGGGameUpdateAgentThread" project="ac-games-agent" xLocation="620" yLocation="1115"/>
+        <class className="com.ac.games.agent.thread.BGGAutoReviewAgentThread" project="ac-games-agent" xLocation="2241" yLocation="597"/>
+        <class className="com.ac.games.agent.thread.BGGScheduledAgentThread" project="ac-games-agent" xLocation="1982" yLocation="931"/>
+        <class className="com.ac.games.agent.thread.CSIAutoReviewAgentThread" project="ac-games-agent" xLocation="1847" yLocation="387"/>
+        <class className="com.ac.games.agent.thread.CSIDataAgentThread" project="ac-games-agent" xLocation="166" yLocation="1113"/>
+        <class className="com.ac.games.agent.thread.CSIDataUpdateAgentThread" project="ac-games-agent" xLocation="562" yLocation="768"/>
+        <class className="com.ac.games.agent.thread.CSIScheduledAgentThread" project="ac-games-agent" xLocation="687" yLocation="1466"/>
+        <class className="com.ac.games.agent.thread.MMAutoReviewAgentThread" project="ac-games-agent" xLocation="1847" yLocation="668"/>
+        <class className="com.ac.games.agent.thread.MMDataAgentThread" project="ac-games-agent" xLocation="100" yLocation="614"/>
+        <class className="com.ac.games.agent.thread.MMDataUpdateAgentThread" project="ac-games-agent" xLocation="1455" yLocation="600"/>
+        <class className="com.ac.games.agent.thread.MMScheduledAgentThread" project="ac-games-agent" xLocation="831" yLocation="282"/>
+        <class className="com.ac.games.agent.thread.SingleBGGGameAgentThread" project="ac-games-agent" xLocation="956" yLocation="566"/>
+        <class className="com.ac.games.agent.thread.StatsThread" project="ac-games-agent" xLocation="2380" yLocation="909"/>
     </diagram>
 </ajsv>

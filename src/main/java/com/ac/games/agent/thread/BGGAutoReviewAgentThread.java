@@ -1,6 +1,5 @@
 package com.ac.games.agent.thread;
 
-import java.io.Console;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,7 +51,7 @@ public class BGGAutoReviewAgentThread extends Thread {
     //We want to start by weeding out any junk data entries, which should be less when finalized, but could be a lot now.
     //For most of this class, we are going to bypass the service and communicate directly with the database because the
     //queryies we need to run are too specific.
-    Console console = System.console();
+    //Console console = System.console();
     
     MongoClient client = null;
     try {

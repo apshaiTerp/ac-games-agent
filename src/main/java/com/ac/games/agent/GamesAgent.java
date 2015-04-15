@@ -37,6 +37,18 @@ public class GamesAgent {
     serverAddress = "http://localhost:8080/ac-games-restservice-spring-0.3.0-SNAPSHOT";
     //serverAddress = "http://localhost:8080";
     
+    try {
+      Thread thread1 = new BatchBGGGameAgentThread(170000, 180000);
+      thread1.start();
+      thread1.join();
+      Thread thread2 = new BGGAutoReviewAgentThread();
+      thread2.start();
+      thread2.join();
+    } catch (Throwable t) {
+      System.out.println ("Oop!");
+      t.printStackTrace();
+    }
+    
     ScheduledThreadPoolExecutor mainTaskPool = new ScheduledThreadPoolExecutor(1);
     ScheduledThreadPoolExecutor subTaskPool  = new ScheduledThreadPoolExecutor(1);
     

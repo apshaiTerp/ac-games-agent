@@ -168,7 +168,7 @@ public class CSIDataAgentThread extends BackgroundAgentThread {
             notFoundCount++;
             System.out.println ("Nothing Found Count: " + notFoundCount);
 
-            if (notFoundCount > 10000) {
+            if (notFoundCount > 20000) {
               System.out.println ("I think we found too many empty batches.  Exiting now.");
               return;
             }

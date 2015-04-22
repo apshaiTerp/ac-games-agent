@@ -38,10 +38,10 @@ public class GamesAgent {
     //serverAddress = "http://localhost:8080";
     
     try {
-      Thread thread1 = new BatchBGGGameAgentThread(170000, 180000);
+      Thread thread1 = new CSIDataAgentThread(FIRST_CSI_ENTRY, 240000);
       thread1.start();
       thread1.join();
-      Thread thread2 = new BGGAutoReviewAgentThread();
+      Thread thread2 = new CSIAutoReviewAgentThread();
       thread2.start();
       thread2.join();
     } catch (Throwable t) {
@@ -49,6 +49,7 @@ public class GamesAgent {
       t.printStackTrace();
     }
     
+    /*****************
     ScheduledThreadPoolExecutor mainTaskPool = new ScheduledThreadPoolExecutor(1);
     ScheduledThreadPoolExecutor subTaskPool  = new ScheduledThreadPoolExecutor(1);
     
@@ -74,6 +75,7 @@ public class GamesAgent {
         Thread.sleep(10000);
       } catch (Throwable t) { break; }
     }
+    /*****************/
     System.out.println ("Processing Complete!");
   }
 

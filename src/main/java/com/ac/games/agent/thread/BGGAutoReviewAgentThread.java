@@ -126,8 +126,8 @@ public class BGGAutoReviewAgentThread extends Thread {
     
     /****************************************************************************************************/
     //We need to pull sequence values in case we'll be adding anything:
-    long maxGameID  = Math.max(0, getMaxSequenceValue(gameCollection));
-    long maxReltnID = Math.max(0, getMaxSequenceValue(reltnCollection));
+    long maxGameID  = Math.max(0, getMaxGameSequenceValue(gameCollection));
+    long maxReltnID = Math.max(0, getMaxGameReltnSequenceValue(reltnCollection));
     
     /****************************************************************************************************/
     //Now we want to identify and auto-approve games with no publisher listed.
@@ -905,23 +905,39 @@ public class BGGAutoReviewAgentThread extends Thread {
     return game;
   }
   
-  private long getMaxSequenceValue(DBCollection collection) {
+  private long getMaxGameSequenceValue(DBCollection collection) {
     long result = -1;
     //This is the format we are trying to emulate:
     //db.collection.aggregate( { $group : { _id  : "", count : { $sum : 1 } } } )
+    
+    BasicDBObject filterObject = new BasicDBObject("_id", 0);
+    filterObject.append("gameID", 1);
+    BasicDBObject sortObject   = new BasicDBObject("gameID", -1);
 
-    DBObject maxObject         = new BasicDBObject("$sum", 1);
-    DBObject groupFieldsObject = new BasicDBObject("_id", "");
-    groupFieldsObject.put("count", maxObject);
-    DBObject groupObject       = new BasicDBObject("$group", groupFieldsObject);
-    
-    List<DBObject> pipeline = new ArrayList<DBObject>(1);
-    pipeline.add(groupObject);
-    
-    AggregationOutput output = collection.aggregate(pipeline);
-    for (DBObject object : output.results()) {
-      if (object.containsField("count")) result = (Integer)object.get("count");
+    DBCursor cursor = collection.find(new BasicDBObject(), filterObject).sort(sortObject).limit(1);
+    while (cursor.hasNext()) {
+      DBObject object = cursor.next();
+      result = (Long)object.get("gameID");
     }
+    try { cursor.close(); } catch (Throwable t) { /** Ignore Errors */ }
+    return result;
+  }
+
+  private long getMaxGameReltnSequenceValue(DBCollection collection) {
+    long result = -1;
+    //This is the format we are trying to emulate:
+    //db.collection.aggregate( { $group : { _id  : "", count : { $sum : 1 } } } )
+    
+    BasicDBObject filterObject = new BasicDBObject("_id", 0);
+    filterObject.append("reltnID", 1);
+    BasicDBObject sortObject   = new BasicDBObject("reltnID", -1);
+
+    DBCursor cursor = collection.find(new BasicDBObject(), filterObject).sort(sortObject).limit(1);
+    while (cursor.hasNext()) {
+      DBObject object = cursor.next();
+      result = (Long)object.get("reltnID");
+    }
+    try { cursor.close(); } catch (Throwable t) { /** Ignore Errors */ }
     return result;
   }
 }

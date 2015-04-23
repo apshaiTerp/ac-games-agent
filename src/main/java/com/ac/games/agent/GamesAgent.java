@@ -44,7 +44,7 @@ public class GamesAgent {
       Thread thread2 = new BGGAutoReviewAgentThread();
       thread2.start();
       thread2.join();
-      Thread thread3 = new MMScheduledAgentThread();
+      Thread thread3 = new CSIAutoReviewAgentThread();
       thread3.start();
       thread3.join();
       Thread thread4 = new MMAutoReviewAgentThread();

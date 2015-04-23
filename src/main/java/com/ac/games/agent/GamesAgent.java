@@ -38,10 +38,10 @@ public class GamesAgent {
     //serverAddress = "http://localhost:8080";
     
     try {
-      Thread thread1 = new CSIDataAgentThread(FIRST_CSI_ENTRY, 240000);
+      Thread thread1 = new CSIAutoReviewAgentThread();
       thread1.start();
       thread1.join();
-      Thread thread2 = new CSIAutoReviewAgentThread();
+      Thread thread2 = new StatsThread();
       thread2.start();
       thread2.join();
     } catch (Throwable t) {

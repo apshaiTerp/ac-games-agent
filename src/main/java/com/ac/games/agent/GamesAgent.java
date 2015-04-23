@@ -38,16 +38,13 @@ public class GamesAgent {
     //serverAddress = "http://localhost:8080";
     
     try {
-      //Thread thread1 = new BGGScheduledAgentThread();
-      //thread1.start();
-      //thread1.join();
-      Thread thread2 = new BGGAutoReviewAgentThread();
+      Thread thread2 = new BGGScheduledAgentThread();
       thread2.start();
       thread2.join();
-      Thread thread3 = new CSIAutoReviewAgentThread();
+      Thread thread3 = new CSIScheduledAgentThread();
       thread3.start();
       thread3.join();
-      Thread thread4 = new MMAutoReviewAgentThread();
+      Thread thread4 = new MMScheduledAgentThread();
       thread4.start();
       thread4.join();
 

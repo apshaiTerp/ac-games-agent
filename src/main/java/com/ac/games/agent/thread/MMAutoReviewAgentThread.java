@@ -138,7 +138,7 @@ public class MMAutoReviewAgentThread extends Thread {
     }
     try { cursor.close(); } catch (Throwable t) { /** Ignore Errors */ }
 
-    System.out.println ("I found " + gamesToApprove.size() + " CSI items that need approval.");
+    System.out.println ("I found " + gamesToApprove.size() + " MM items that need approval.");
     //value = console.readLine("< Press Enter to Proceed >");
     //if (value.equalsIgnoreCase("q"))  {
     //  try { client.close(); } catch (Throwable t) { /** Ignore Errors */ }
@@ -157,7 +157,7 @@ public class MMAutoReviewAgentThread extends Thread {
     
     for (MiniatureMarketPriceData data : gamesToApprove) {
       count++;
-      System.out.println ("[" + count + "/" + gamesToApprove.size() + "] Reviewing " + data.getTitle() + " (csiID:" + data.getMmID() + ")");
+      System.out.println ("[" + count + "/" + gamesToApprove.size() + "] Reviewing " + data.getTitle() + " (mmID:" + data.getMmID() + ")");
 
       String origGameName = data.getTitle().trim();
       String altGameName  = origGameName.replace(BOARD_GAME_TAG, "").replace(EXPANSION_TAG, "").trim();
@@ -182,10 +182,10 @@ public class MMAutoReviewAgentThread extends Thread {
       try { cursor.close(); } catch (Throwable t) { /** Ignore Errors */ }
       if (hitCount == 0) {
         noMatchCount++;
-        System.out.println ("  No Existing Game Matches Found.  Skipping CSI Entry");
+        System.out.println ("  No Existing Game Matches Found.  Skipping MM Entry");
       } else if (hitCount > 1) {
         tooManyMatchCount++;
-        System.out.println ("  Multiple Game Matches Found.  Skipping CSI Entry");
+        System.out.println ("  Multiple Game Matches Found.  Skipping MM Entry");
       } else {
         approveCount++;
         System.out.println ("  Found exact match.  Approving Game Entry");
@@ -208,7 +208,7 @@ public class MMAutoReviewAgentThread extends Thread {
         if (reltn == null) {
           approveCount--;
           noReltnCount++;
-          System.out.println ("  !! Data issue, no Relation Data found.  Skipping CSI Entry.");
+          System.out.println ("  !! Data issue, no Relation Data found.  Skipping MM Entry.");
         } else {
           List<Long> mmIDs = reltn.getMmIDs();
           if (mmIDs == null) mmIDs = new LinkedList<Long>();

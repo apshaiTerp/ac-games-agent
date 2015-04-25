@@ -9,6 +9,7 @@ import com.ac.games.agent.thread.BatchBGGGameAgentThread;
 import com.ac.games.agent.thread.CSIAutoReviewAgentThread;
 import com.ac.games.agent.thread.CSIDataAgentThread;
 import com.ac.games.agent.thread.CSIScheduledAgentThread;
+import com.ac.games.agent.thread.FixExpansionThread;
 import com.ac.games.agent.thread.MMAutoReviewAgentThread;
 import com.ac.games.agent.thread.MMDataAgentThread;
 import com.ac.games.agent.thread.MMScheduledAgentThread;
@@ -38,9 +39,18 @@ public class GamesAgent {
     //serverAddress = "http://localhost:8080";
     
     try {
+      Thread thread1 = new FixExpansionThread();
+      thread1.start();
+      thread1.join();
+      
       Thread thread2 = new BGGScheduledAgentThread();
       thread2.start();
       thread2.join();
+      
+      Thread thread2Sub = new FixExpansionThread();
+      thread2Sub.start();
+      thread2Sub.join();
+      
       Thread thread3 = new CSIScheduledAgentThread();
       thread3.start();
       thread3.join();

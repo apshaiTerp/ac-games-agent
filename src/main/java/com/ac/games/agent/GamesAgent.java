@@ -51,12 +51,12 @@ public class GamesAgent {
       //thread2Sub.start();
       //thread2Sub.join();
       
-      Thread thread3 = new CSIScheduledAgentThread();
-      thread3.start();
-      thread3.join();
-      Thread thread4 = new MMScheduledAgentThread();
-      thread4.start();
-      thread4.join();
+      //Thread thread3 = new CSIScheduledAgentThread();
+      //thread3.start();
+      //thread3.join();
+      //Thread thread4 = new MMScheduledAgentThread();
+      //thread4.start();
+      //thread4.join();
 
       Thread thread5 = new BGGAutoReviewAgentThread();
       thread5.start();

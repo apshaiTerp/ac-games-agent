@@ -43,30 +43,30 @@ public class GamesAgent {
       //thread1.start();
       //thread1.join();
       
-      Thread thread2 = new BGGScheduledAgentThread();
-      thread2.start();
-      thread2.join();
+      //Thread thread2 = new BGGScheduledAgentThread();
+      //thread2.start();
+      //thread2.join();
       
-      Thread thread3 = new CSIScheduledAgentThread();
-      thread3.start();
-      thread3.join();
-      Thread thread4 = new MMScheduledAgentThread();
-      thread4.start();
-      thread4.join();
+      //Thread thread3 = new CSIScheduledAgentThread();
+      //thread3.start();
+      //thread3.join();
+      //Thread thread4 = new MMScheduledAgentThread();
+      //thread4.start();
+      //thread4.join();
 
       Thread thread5 = new BGGAutoReviewAgentThread();
       thread5.start();
       thread5.join();
-      Thread thread6 = new CSIAutoReviewAgentThread();
-      thread6.start();
-      thread6.join();
-      Thread thread7 = new MMAutoReviewAgentThread();
-      thread7.start();
-      thread7.join();
+      //Thread thread6 = new CSIAutoReviewAgentThread();
+      //thread6.start();
+      //thread6.join();
+      //Thread thread7 = new MMAutoReviewAgentThread();
+      //thread7.start();
+      //thread7.join();
       
-      Thread thread8 = new StatsThread();
-      thread8.start();
-      thread8.join();
+      //Thread thread8 = new StatsThread();
+      //thread8.start();
+      //thread8.join();
     } catch (Throwable t) {
       System.out.println ("Oop!");
       t.printStackTrace();

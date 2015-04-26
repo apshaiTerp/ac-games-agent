@@ -132,7 +132,7 @@ public class BGGAutoReviewAgentThread extends Thread {
     /****************************************************************************************************/
     //Now we want to identify and auto-approve games with no publisher listed.
     //First we do parents, then we do children
-    //db.bgggame.find( { reviewState: 0, gameType: {$in: [0, 2]}, publishers : {$exists:true}, $where:'this.publishers.length<2'} )
+    //db.bgggame.find( { reviewState: 0, gameType: {$in: [0, 2]}, publishers : {$exists:true}, $where:'this.publishers.length<1'} )
     BasicDBList parentList = new BasicDBList();
     parentList.add(0);
     parentList.add(2);
@@ -221,6 +221,7 @@ public class BGGAutoReviewAgentThread extends Thread {
     //publishers.  We have two lists, a large one of 'trusted' Publishers, and a small one of publisher descriptions
     //to be avoided.  Once we get our list, we want to try and filter through those items and make some assumptions.
     queryObject = new BasicDBObject();
+    queryObject.append("reviewState", 0);
     queryObject.append("gameType", new BasicDBObject("$in", parentList));
     queryObject.append("publishers", new BasicDBObject("$exists", true));
     queryObject.append("publishers.1", new BasicDBObject("$exists", true));

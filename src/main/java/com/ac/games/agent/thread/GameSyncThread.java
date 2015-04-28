@@ -83,9 +83,10 @@ public class GameSyncThread extends Thread {
             if (game != null) {
               System.out.println ("  Replacing game content...");
               
-              if (game.getExpansionIDs() != null)
-              System.out.println ("  Old getExpansionIDs().size(): " + curGame.getExpansionIDs().size());
-              System.out.println ("  New getExpansionIDs().size(): " + game.getExpansionIDs().size());
+              if (game.getExpansionIDs() != null) {
+                System.out.println ("  Old getExpansionIDs().size(): " + curGame.getExpansionIDs().size());
+                System.out.println ("  New getExpansionIDs().size(): " + game.getExpansionIDs().size());
+              }
               
               item.setGame(game);
             } else {
@@ -129,9 +130,10 @@ public class GameSyncThread extends Thread {
         if (game != null) {
           System.out.println ("  Replacing game content...");
           
-          if (game.getExpansionIDs() != null)
-          System.out.println ("  Old getExpansionIDs().size(): " + curGame.getExpansionIDs().size());
-          System.out.println ("  New getExpansionIDs().size(): " + game.getExpansionIDs().size());
+          if (game.getExpansionIDs() != null) {
+            System.out.println ("  Old getExpansionIDs().size(): " + curGame.getExpansionIDs().size());
+            System.out.println ("  New getExpansionIDs().size(): " + game.getExpansionIDs().size());
+          }
           
           item.setGame(game);
         } else {

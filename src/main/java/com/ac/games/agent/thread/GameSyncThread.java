@@ -69,6 +69,7 @@ public class GameSyncThread extends Thread {
             long gameID = item.getGameID();
             
             System.out.println ("  Item ID: " + item.getItemID() + "   Game ID: " + item.getGameID());
+            System.out.println ("  Game Name: " + item.getGame().getName());
             
             BasicDBObject searchObject = new BasicDBObject("gameID", gameID);
             DBCursor gameCursor = gameCollection.find(searchObject);
@@ -76,8 +77,7 @@ public class GameSyncThread extends Thread {
             while (gameCursor.hasNext())
               game = GameConverter.convertMongoToGame(gameCursor.next());
             try { gameCursor.close(); } catch (Throwable t2) { /** Igmore Errors */ }
-            
-            
+
             Game curGame = item.getGame();
             
             if (game != null) {
@@ -89,7 +89,7 @@ public class GameSyncThread extends Thread {
               
               item.setGame(game);
             } else {
-              
+              System.out.println ("I have a problem here");
             }
           }
         } else {
@@ -100,6 +100,8 @@ public class GameSyncThread extends Thread {
         BasicDBObject searchObject = new BasicDBObject("collectionID", curCollection.getCollectionID());
         colCollection.update(searchObject, CollectionConverter.convertCollectionToMongo(curCollection));
       }//end for
+      
+      System.out.println ("Beginning to Process individual games...");
       
       List<CollectionItem> allItems = new LinkedList<CollectionItem>();
       cursor = itemCollection.find();
@@ -112,6 +114,9 @@ public class GameSyncThread extends Thread {
       for (CollectionItem item : allItems) {
         long gameID = item.getGameID();
         
+        System.out.println ("  Item ID: " + item.getItemID() + "   Game ID: " + item.getGameID());
+        System.out.println ("  Game Name: " + item.getGame().getName());
+        
         BasicDBObject searchObject = new BasicDBObject("gameID", gameID);
         DBCursor gameCursor = gameCollection.find(searchObject);
         Game game = null;
@@ -119,11 +124,22 @@ public class GameSyncThread extends Thread {
           game = GameConverter.convertMongoToGame(gameCursor.next());
         try { gameCursor.close(); } catch (Throwable t2) { /** Igmore Errors */ }
         
-        if (game != null)
+        Game curGame = item.getGame();
+        
+        if (game != null) {
+          System.out.println ("  Replacing game content...");
+          
+          if (game.getExpansionIDs() != null)
+          System.out.println ("  Old getExpansionIDs().size(): " + curGame.getExpansionIDs().size());
+          System.out.println ("  New getExpansionIDs().size(): " + game.getExpansionIDs().size());
+          
           item.setGame(game);
+        } else {
+          System.out.println ("I have a problem here");
+        }
         
         searchObject = new BasicDBObject("itemID", item.getItemID());
-        colCollection.update(searchObject, CollectionItemConverter.convertCollectionItemToMongo(item));
+        itemCollection.update(searchObject, CollectionItemConverter.convertCollectionItemToMongo(item));
       }
       
       try { client.close(); } catch (Throwable t2) { /** Ignore Errors */ }

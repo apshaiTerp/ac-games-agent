@@ -13,8 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import com.ac.games.agent.GamesAgent;
-import com.ac.games.data.CoolStuffIncPriceData;
-import com.ac.games.db.mongo.CSIDataConverter;
+import com.ac.games.data.MiniatureMarketPriceData;
+import com.ac.games.db.mongo.MMDataConverter;
 import com.ac.games.rest.message.SimpleErrorData;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -30,16 +30,16 @@ import com.mongodb.WriteConcern;
  * @author ac010168
  *
  */
-public class CSIDataUpdateAgentThread2 extends BackgroundAgentThread {
+public class MMDataUpdateAgentThread2 extends BackgroundAgentThread {
   
   /** Service access point */
-  public final static String SERVICE_ROOT = "/external/csidata";
+  public final static String SERVICE_ROOT = "/external/mmdata";
   /** Parameter Request list for read requests */
-  public final static String PARAM_LIST   = "?csiid=<gameID>&source=hybrid&sync=y";
+  public final static String PARAM_LIST   = "?mmid=<gameID>&source=hybrid&sync=y";
   /** Parameter Replace Tag */
   public final static String REPLACE_TAG  = "<gameID>";
 
-  public CSIDataUpdateAgentThread2() {
+  public MMDataUpdateAgentThread2() {
     super(0,0);
   }
   
@@ -66,24 +66,24 @@ public class CSIDataUpdateAgentThread2 extends BackgroundAgentThread {
       
       DB mongoDB = client.getDB("livedb");
       
-      DBCollection csiCollection = mongoDB.getCollection("csidata");
+      DBCollection mmCollection = mongoDB.getCollection("mmdata");
       
-      List<CoolStuffIncPriceData> csiApprovedList = new LinkedList<CoolStuffIncPriceData>();
+      List<MiniatureMarketPriceData> mmApprovedList = new LinkedList<MiniatureMarketPriceData>();
       BasicDBObject searchObject = new BasicDBObject("reviewState", 1);
             
-      DBCursor cursor = csiCollection.find(searchObject);
+      DBCursor cursor = mmCollection.find(searchObject);
       while (cursor.hasNext()) {
-        CoolStuffIncPriceData data = CSIDataConverter.convertMongoToCSI(cursor.next());
-        csiApprovedList.add(data);
+        MiniatureMarketPriceData data = MMDataConverter.convertMongoToMM(cursor.next());
+        mmApprovedList.add(data);
       }
       
-      System.out.println ("How many CSI entries am I about to review: " + csiApprovedList.size());
+      System.out.println ("How many MM entries am I about to review: " + mmApprovedList.size());
       
-      List<CoolStuffIncPriceData> changedGames = new LinkedList<CoolStuffIncPriceData>();
+      List<MiniatureMarketPriceData> changedGames = new LinkedList<MiniatureMarketPriceData>();
       int count = 0;
-      for (CoolStuffIncPriceData data : csiApprovedList) {
+      for (MiniatureMarketPriceData data : mmApprovedList) {
         count++;
-        System.out.println ("[" + count + "/" + csiApprovedList.size() + "] Processing csiID " + data.getCsiID() + " - " + data.getTitle());
+        System.out.println ("[" + count + "/" + mmApprovedList.size() + "] Processing csiID " + data.getMmID() + " - " + data.getTitle());
         
         RestTemplate restTemplate  = new RestTemplate();
         ObjectMapper mapper        = new ObjectMapper();
@@ -91,10 +91,10 @@ public class CSIDataUpdateAgentThread2 extends BackgroundAgentThread {
         headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
         HttpEntity<String> request = new HttpEntity<String>(headers);
         
-        String url = GamesAgent.serverAddress + SERVICE_ROOT + PARAM_LIST.replace(REPLACE_TAG, "" + data.getCsiID());
+        String url = GamesAgent.serverAddress + SERVICE_ROOT + PARAM_LIST.replace(REPLACE_TAG, "" + data.getMmID());
         System.out.println ("  The url we are requesting is: " + url);
         
-        CoolStuffIncPriceData game = null;
+        MiniatureMarketPriceData game = null;
         SimpleErrorData errorData  = null;
         
         try {
@@ -104,7 +104,7 @@ public class CSIDataUpdateAgentThread2 extends BackgroundAgentThread {
           if (responseBody.contains("\"errorType\"") && responseBody.contains("\"errorMessage\"")) {
             errorData = mapper.readValue(responseBody, SimpleErrorData.class);
           } else {
-            game = mapper.readValue(responseBody, CoolStuffIncPriceData.class);
+            game = mapper.readValue(responseBody, MiniatureMarketPriceData.class);
           }
           
           if (errorData != null) {
@@ -133,7 +133,7 @@ public class CSIDataUpdateAgentThread2 extends BackgroundAgentThread {
           System.out.println ("Something else bad happened here: " + t.getMessage());
           failCount++;
           if (failCount >= 10) {
-            System.out.println ("That's it!  I'm out.  Game ID: " + data.getCsiID() + " could not be processed!");
+            System.out.println ("That's it!  I'm out.  Game ID: " + data.getMmID() + " could not be processed!");
             return;
           }
         }
@@ -144,9 +144,9 @@ public class CSIDataUpdateAgentThread2 extends BackgroundAgentThread {
       System.out.println ("=============================================================================================");
       
       count = 0;
-      for (CoolStuffIncPriceData data : changedGames) {
+      for (MiniatureMarketPriceData data : changedGames) {
         count++;
-        System.out.println("[" + count + "/" + changedGames.size() + "] CSI ID: " + data.getCsiID() + " - " + data.getTitle());
+        System.out.println("[" + count + "/" + changedGames.size() + "] CSI ID: " + data.getMmID() + " - " + data.getTitle());
       }
       
       try { client.close(); } catch (Throwable t2) { /** Ignore Errors */ }

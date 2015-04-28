@@ -1,8 +1,5 @@
 package com.ac.games.agent;
 
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
 import com.ac.games.agent.thread.BGGAutoReviewAgentThread;
 import com.ac.games.agent.thread.BGGScheduledAgentThread;
 import com.ac.games.agent.thread.BatchBGGGameAgentThread;
@@ -10,10 +7,10 @@ import com.ac.games.agent.thread.CSIAutoReviewAgentThread;
 import com.ac.games.agent.thread.CSIDataAgentThread;
 import com.ac.games.agent.thread.CSIDataUpdateAgentThread2;
 import com.ac.games.agent.thread.CSIScheduledAgentThread;
-import com.ac.games.agent.thread.FixExpansionThread;
 import com.ac.games.agent.thread.GameSyncThread;
 import com.ac.games.agent.thread.MMAutoReviewAgentThread;
 import com.ac.games.agent.thread.MMDataAgentThread;
+import com.ac.games.agent.thread.MMDataUpdateAgentThread2;
 import com.ac.games.agent.thread.MMScheduledAgentThread;
 import com.ac.games.agent.thread.SingleBGGGameAgentThread;
 import com.ac.games.agent.thread.StatsThread;
@@ -41,11 +38,11 @@ public class GamesAgent {
     //serverAddress = "http://localhost:8080";
     
     try {
-      Thread thread1 = new CSIDataUpdateAgentThread2();
-      thread1.start();
-      thread1.join();
+      //Thread thread1 = new CSIDataUpdateAgentThread2();
+      //thread1.start();
+      //thread1.join();
       
-      /**************
+      /**************/
       Thread thread2 = new BGGScheduledAgentThread();
       thread2.start();
       thread2.join();
@@ -71,9 +68,16 @@ public class GamesAgent {
       thread8.start();
       thread8.join();
       
-      Thread thread9 = new StatsThread();
+      Thread thread9 = new CSIDataUpdateAgentThread2();
       thread9.start();
       thread9.join();
+      Thread thread10 = new MMDataUpdateAgentThread2();
+      thread10.start();
+      thread10.join();
+      
+      Thread thread20 = new StatsThread();
+      thread20.start();
+      thread20.join();
       /**************/
     } catch (Throwable t) {
       System.out.println ("Oop!");

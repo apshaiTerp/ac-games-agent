@@ -8,6 +8,7 @@ import com.ac.games.agent.thread.BGGScheduledAgentThread;
 import com.ac.games.agent.thread.BatchBGGGameAgentThread;
 import com.ac.games.agent.thread.CSIAutoReviewAgentThread;
 import com.ac.games.agent.thread.CSIDataAgentThread;
+import com.ac.games.agent.thread.CSIDataUpdateAgentThread2;
 import com.ac.games.agent.thread.CSIScheduledAgentThread;
 import com.ac.games.agent.thread.FixExpansionThread;
 import com.ac.games.agent.thread.GameSyncThread;
@@ -40,10 +41,11 @@ public class GamesAgent {
     //serverAddress = "http://localhost:8080";
     
     try {
-      //Thread thread1 = new FixExpansionThread();
-      //thread1.start();
-      //thread1.join();
+      Thread thread1 = new CSIDataUpdateAgentThread2();
+      thread1.start();
+      thread1.join();
       
+      /**************
       Thread thread2 = new BGGScheduledAgentThread();
       thread2.start();
       thread2.join();
@@ -72,6 +74,7 @@ public class GamesAgent {
       Thread thread9 = new StatsThread();
       thread9.start();
       thread9.join();
+      /**************/
     } catch (Throwable t) {
       System.out.println ("Oop!");
       t.printStackTrace();

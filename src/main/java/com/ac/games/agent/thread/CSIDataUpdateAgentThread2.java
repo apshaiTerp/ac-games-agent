@@ -19,7 +19,6 @@ import com.ac.games.rest.message.SimpleErrorData;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -70,9 +69,7 @@ public class CSIDataUpdateAgentThread2 extends BackgroundAgentThread {
       DBCollection csiCollection = mongoDB.getCollection("csidata");
       
       List<CoolStuffIncPriceData> csiApprovedList = new LinkedList<CoolStuffIncPriceData>();
-      BasicDBList reviewList = new BasicDBList();
-      reviewList.add(2);
-      BasicDBObject searchObject = new BasicDBObject("reviewState", new BasicDBObject("$in", reviewList));
+      BasicDBObject searchObject = new BasicDBObject("reviewState", 1);
             
       DBCursor cursor = csiCollection.find(searchObject);
       while (cursor.hasNext()) {

@@ -30,7 +30,7 @@ public class GameSyncThread extends Thread {
   
   @Override
   public void run() {
-    System.out.println ("Beginning FixExpansionThread!");
+    System.out.println ("Beginning GameSyncThread!");
     
     MongoClient client = null;
     try {
@@ -59,9 +59,16 @@ public class GameSyncThread extends Thread {
       for (Collection curCollection : collections) {
         List<CollectionItem> items = curCollection.getGames();
         
+        System.out.println ("Inspecting Collection ID: " + curCollection.getCollectionID());
+        
         if (items != null) {
+          
+          System.out.println ("Items is not null");
+          
           for (CollectionItem item : items) {
             long gameID = item.getGameID();
+            
+            System.out.println ("  Item ID: " + item.getItemID() + "   Game ID: " + item.getGameID());
             
             BasicDBObject searchObject = new BasicDBObject("gameID", gameID);
             DBCursor gameCursor = gameCollection.find(searchObject);
@@ -70,8 +77,20 @@ public class GameSyncThread extends Thread {
               game = GameConverter.convertMongoToGame(gameCursor.next());
             try { gameCursor.close(); } catch (Throwable t2) { /** Igmore Errors */ }
             
-            if (game != null)
+            
+            Game curGame = item.getGame();
+            
+            if (game != null) {
+              System.out.println ("  Replacing game content...");
+              
+              if (game.getExpansionIDs() != null)
+              System.out.println ("  Old getExpansionIDs().size(): " + curGame.getExpansionIDs().size());
+              System.out.println ("  New getExpansionIDs().size(): " + game.getExpansionIDs().size());
+              
               item.setGame(game);
+            } else {
+              
+            }
           }
         } else {
           items = new ArrayList<CollectionItem>();
@@ -109,7 +128,7 @@ public class GameSyncThread extends Thread {
       
       try { client.close(); } catch (Throwable t2) { /** Ignore Errors */ }
 
-      System.out.println ("FixExpansionThread Finished Successfully!");
+      System.out.println ("GameSyncThread Finished Successfully!");
     } catch (Throwable t) {
       System.out.println ("This is the master Thread Throwable: " + t.getMessage());
       t.printStackTrace();

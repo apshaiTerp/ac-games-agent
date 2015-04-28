@@ -78,15 +78,8 @@ public class GameSyncThread extends Thread {
               game = GameConverter.convertMongoToGame(gameCursor.next());
             try { gameCursor.close(); } catch (Throwable t2) { /** Igmore Errors */ }
 
-            Game curGame = item.getGame();
-            
             if (game != null) {
               System.out.println ("  Replacing game content...");
-              
-              if (game.getExpansionIDs() != null) {
-                System.out.println ("  Old getExpansionIDs().size(): " + curGame.getExpansionIDs().size());
-                System.out.println ("  New getExpansionIDs().size(): " + game.getExpansionIDs().size());
-              }
               
               item.setGame(game);
             } else {
@@ -125,15 +118,8 @@ public class GameSyncThread extends Thread {
           game = GameConverter.convertMongoToGame(gameCursor.next());
         try { gameCursor.close(); } catch (Throwable t2) { /** Igmore Errors */ }
         
-        Game curGame = item.getGame();
-        
         if (game != null) {
           System.out.println ("  Replacing game content...");
-          
-          if (game.getExpansionIDs() != null) {
-            System.out.println ("  Old getExpansionIDs().size(): " + curGame.getExpansionIDs().size());
-            System.out.println ("  New getExpansionIDs().size(): " + game.getExpansionIDs().size());
-          }
           
           item.setGame(game);
         } else {

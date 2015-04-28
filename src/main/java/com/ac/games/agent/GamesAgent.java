@@ -44,7 +44,6 @@ public class GamesAgent {
       //thread1.start();
       //thread1.join();
       
-      /*********
       Thread thread2 = new BGGScheduledAgentThread();
       thread2.start();
       thread2.join();
@@ -65,8 +64,6 @@ public class GamesAgent {
       Thread thread7 = new MMAutoReviewAgentThread();
       thread7.start();
       thread7.join();
-      
-      *******/
       
       Thread thread8 = new GameSyncThread();
       thread8.start();

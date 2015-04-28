@@ -63,6 +63,7 @@ public class MMAutoReviewAgentThread extends Thread {
     rejectCategoryList.add(MiniatureMarketCategoryConverter.RPGS_FLAG);
     rejectCategoryList.add(MiniatureMarketCategoryConverter.ACCESSORIES_FLAG);
     rejectCategoryList.add(MiniatureMarketCategoryConverter.UNKNOWN_FLAG);
+    rejectCategoryList.add(MiniatureMarketCategoryConverter.COLLECTIBLES_FLAG);
     
     BasicDBObject queryObject = new BasicDBObject();
     queryObject.append("reviewState", 0);

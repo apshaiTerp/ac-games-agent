@@ -10,6 +10,7 @@ import com.ac.games.agent.thread.CSIAutoReviewAgentThread;
 import com.ac.games.agent.thread.CSIDataAgentThread;
 import com.ac.games.agent.thread.CSIScheduledAgentThread;
 import com.ac.games.agent.thread.FixExpansionThread;
+import com.ac.games.agent.thread.GameSyncThread;
 import com.ac.games.agent.thread.MMAutoReviewAgentThread;
 import com.ac.games.agent.thread.MMDataAgentThread;
 import com.ac.games.agent.thread.MMScheduledAgentThread;
@@ -43,6 +44,7 @@ public class GamesAgent {
       //thread1.start();
       //thread1.join();
       
+      /*********
       Thread thread2 = new BGGScheduledAgentThread();
       thread2.start();
       thread2.join();
@@ -64,9 +66,15 @@ public class GamesAgent {
       thread7.start();
       thread7.join();
       
-      Thread thread8 = new StatsThread();
+      *******/
+      
+      Thread thread8 = new GameSyncThread();
       thread8.start();
       thread8.join();
+      
+      Thread thread9 = new StatsThread();
+      thread9.start();
+      thread9.join();
     } catch (Throwable t) {
       System.out.println ("Oop!");
       t.printStackTrace();

@@ -71,7 +71,6 @@ public class CSIDataUpdateAgentThread2 extends BackgroundAgentThread {
       
       List<CoolStuffIncPriceData> csiApprovedList = new LinkedList<CoolStuffIncPriceData>();
       BasicDBList reviewList = new BasicDBList();
-      reviewList.add(0);
       reviewList.add(2);
       BasicDBObject searchObject = new BasicDBObject("reviewState", new BasicDBObject("$in", reviewList));
             

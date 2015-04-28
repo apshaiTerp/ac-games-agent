@@ -151,7 +151,7 @@ public class CSIDataUpdateAgentThread2 extends BackgroundAgentThread {
       
       try { client.close(); } catch (Throwable t2) { /** Ignore Errors */ }
 
-      System.out.println ("FixExpansionThread Finished Successfully!");
+      System.out.println ("CSIDataUpdateAgentThread2 Finished Successfully!");
     } catch (Throwable t) {
       System.out.println ("This is the master Thread Throwable: " + t.getMessage());
       t.printStackTrace();

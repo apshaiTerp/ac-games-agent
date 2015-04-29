@@ -146,7 +146,7 @@ public class MMDataUpdateAgentThread2 extends BackgroundAgentThread {
       count = 0;
       for (MiniatureMarketPriceData data : changedGames) {
         count++;
-        System.out.println("[" + count + "/" + changedGames.size() + "] CSI ID: " + data.getMmID() + " - " + data.getTitle());
+        System.out.println("[" + count + "/" + changedGames.size() + "] MM ID: " + data.getMmID() + " - " + data.getTitle());
       }
       
       try { client.close(); } catch (Throwable t2) { /** Ignore Errors */ }

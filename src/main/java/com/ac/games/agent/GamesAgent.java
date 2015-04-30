@@ -1,5 +1,7 @@
 package com.ac.games.agent;
 
+import java.util.Date;
+
 import com.ac.games.agent.thread.BGGAutoReviewAgentThread;
 import com.ac.games.agent.thread.BGGScheduledAgentThread;
 import com.ac.games.agent.thread.BatchBGGGameAgentThread;
@@ -36,6 +38,7 @@ public class GamesAgent {
   public static void main(String[] args) {
     serverAddress = "http://localhost:8080/ac-games-restservice-spring-0.3.0-SNAPSHOT";
     //serverAddress = "http://localhost:8080";
+    Date startDate = new Date();
     
     try {
       //Thread thread1 = new CSIDataUpdateAgentThread2();
@@ -112,6 +115,11 @@ public class GamesAgent {
     }
     /*****************/
     System.out.println ("Processing Complete!");
+    
+    Date endDate = new Date();
+    long timeDifference = (endDate.getTime() - startDate.getTime()) / 1000;
+    
+    System.out.println ("Total Execution Time: " + timeDifference + " s.");
   }
 
 }

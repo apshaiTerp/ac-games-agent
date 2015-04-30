@@ -214,7 +214,7 @@ public class MMAutoReviewAgentThread extends Thread {
           List<Long> mmIDs = reltn.getMmIDs();
           if (mmIDs == null) mmIDs = new LinkedList<Long>();
           mmIDs.add(data.getMmID());
-          reltn.setCsiIDs(mmIDs);
+          reltn.setMmIDs(mmIDs);
           
           //Now push our objects into the database
           mmCollection.update(matchObject, writeObject, true, false);

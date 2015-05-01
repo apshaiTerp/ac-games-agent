@@ -41,42 +41,42 @@ public class GamesAgent {
     Date startDate = new Date();
     
     try {
-      //Thread thread1 = new CSIDataUpdateAgentThread2();
-      //thread1.start();
-      //thread1.join();
+      Thread thread1 = new CSIDataUpdateAgentThread2();
+      thread1.start();
+      thread1.join();
       
       /**************/
-      //Thread thread2 = new BGGScheduledAgentThread();
-      //thread2.start();
-      //thread2.join();
+      Thread thread2 = new BGGScheduledAgentThread();
+      thread2.start();
+      thread2.join();
       
       Thread thread3 = new CSIScheduledAgentThread();
       thread3.start();
       thread3.join();
-      //Thread thread4 = new MMScheduledAgentThread();
-      //thread4.start();
-      //thread4.join();
+      Thread thread4 = new MMScheduledAgentThread();
+      thread4.start();
+      thread4.join();
 
-      //Thread thread5 = new BGGAutoReviewAgentThread();
-      //thread5.start();
-      //thread5.join();
+      Thread thread5 = new BGGAutoReviewAgentThread();
+      thread5.start();
+      thread5.join();
       Thread thread6 = new CSIAutoReviewAgentThread();
       thread6.start();
       thread6.join();
-      //Thread thread7 = new MMAutoReviewAgentThread();
-      //thread7.start();
-      //thread7.join();
+      Thread thread7 = new MMAutoReviewAgentThread();
+      thread7.start();
+      thread7.join();
       
-      //Thread thread8 = new GameSyncThread();
-      //thread8.start();
-      //thread8.join();
+      Thread thread8 = new GameSyncThread();
+      thread8.start();
+      thread8.join();
       
       Thread thread9 = new CSIDataUpdateAgentThread2();
       thread9.start();
       thread9.join();
-      //Thread thread10 = new MMDataUpdateAgentThread2();
-      //thread10.start();
-      //thread10.join();
+      Thread thread10 = new MMDataUpdateAgentThread2();
+      thread10.start();
+      thread10.join();
       
       Thread thread20 = new StatsThread();
       thread20.start();

@@ -31,14 +31,6 @@ public class TestPublisherDump {
   public void testPubDump() {
     System.out.println ("Starting the pub dump test");
     
-    try {
-      Thread thread6 = new CSIAutoReviewAgentThread();
-      thread6.start();
-      thread6.join();
-    } catch (InterruptedException e1) {
-      e1.printStackTrace();
-    }
-
     MongoClient client = null;
     try {
       client = new MongoClient("192.168.1.9", 27017);

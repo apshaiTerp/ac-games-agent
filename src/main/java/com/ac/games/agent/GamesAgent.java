@@ -41,9 +41,9 @@ public class GamesAgent {
     Date startDate = new Date();
     
     try {
-      Thread thread1 = new CSIDataUpdateAgentThread2();
-      thread1.start();
-      thread1.join();
+      //Thread thread1 = new CSIDataUpdateAgentThread2();
+      //thread1.start();
+      //thread1.join();
       
       /**************/
       Thread thread2 = new BGGScheduledAgentThread();

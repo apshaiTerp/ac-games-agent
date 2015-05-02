@@ -3,23 +3,22 @@ package com.ac.games.agent.test;
 import static org.junit.Assert.assertTrue;
 
 import java.net.UnknownHostException;
-import java.util.Collections;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Test;
 
-import com.ac.games.agent.data.PreferredPublisherList;
-import com.ac.games.data.BGGGame;
+import com.ac.games.agent.thread.CSIAutoReviewAgentThread;
+import com.ac.games.data.CoolStuffIncPriceData;
+import com.ac.games.data.GameReltn;
 import com.ac.games.data.ReviewState;
-import com.ac.games.db.mongo.BGGGameConverter;
+import com.ac.games.db.mongo.CSIDataConverter;
+import com.ac.games.db.mongo.GameReltnConverter;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 
 /**
@@ -34,139 +33,94 @@ public class TestPublisherDump {
     
     MongoClient client = null;
     try {
-      client = new MongoClient("localhost", 27017);
+      client = new MongoClient("192.168.1.9", 27017);
     } catch (UnknownHostException e) {
       e.printStackTrace();
       return;
     }
     
     DB mongoDB = client.getDB("livedb");
-    DBCollection bggCollection   = mongoDB.getCollection("bgggame");
+    DBCollection csiCollection   = mongoDB.getCollection("csidata");
+    DBCollection reltnCollection = mongoDB.getCollection("gamereltn");
     
-    //Categories of invalid of junk criteria
-    //Base game with no player data
-    //db.bgggame.find( { reviewState: 0, minPlayers: {$exists:false}} )
-    BasicDBObject queryObject = new BasicDBObject();
-    queryObject.append("reviewState", 0);
-
-    BasicDBList parentList = new BasicDBList();
-    parentList.add(0);
-    parentList.add(2);
-    
-    queryObject = new BasicDBObject();
-    queryObject.append("gameType", new BasicDBObject("$in", parentList));
-    queryObject.append("publishers", new BasicDBObject("$exists", true));
-    queryObject.append("publishers.1", new BasicDBObject("$exists", true));
-    
-    System.out.println ("Running the following Query:\n  db.bgggame.find( "  + queryObject.toString() + " )");
-     
-    DBCursor cursor = bggCollection.find(queryObject);
-    List<BGGGame> games = new LinkedList<BGGGame>();
+    List<GameReltn> reltnsWithCSIData = new LinkedList<GameReltn>();
+    DBCursor cursor = reltnCollection.find();
     while (cursor.hasNext()) {
-      DBObject object = cursor.next();
-      BGGGame game = BGGGameConverter.convertMongoToGame(object);
-      games.add(game);
+      GameReltn reltn = GameReltnConverter.convertMongoToGameReltn(cursor.next());
+      List<Long> csiIDs = reltn.getCsiIDs();
+      if ((csiIDs != null) && (csiIDs.size() > 0))
+        reltnsWithCSIData.add(reltn);
     }
-    try { cursor.close(); } catch (Throwable t) { /** Ignore Errors */ }
+    try { cursor.close(); } catch (Throwable t) {}
     
-    //At this point, we need to start figuring out what more we need to figure it out.
-    int noPreferredHits      = 0;
-    int onePreferredHit      = 0;
-    int twoPlusPreferredHits = 0;
-    int onlyAvoidPublished   = 0;
-    int solvedWithAvoidHits  = 0;
+    System.out.println ("I have " + reltnsWithCSIData.size() + " GameReltns with CSI Data in them");
     
-    List<String> preferredList = PreferredPublisherList.getTrustedPublishers();
-    
-    for (BGGGame game : games) {
-      List<String> publishers = game.getPublishers();
+    int count = 0;
+    for (GameReltn reltn : reltnsWithCSIData) {
+      count++;
+      System.out.println ("[" + count + "/" + reltnsWithCSIData.size() + "] Processing GameReltn " + reltn.getGameID());
+      List<Long> csiIDs = reltn.getCsiIDs();
+      List<Long> newCSIs = new LinkedList<Long>();
       
-      System.out.println ("Processing " + game.getName() + " (" + game.getBggID() + ")");
-      System.out.println ("  Size of publishers list before scanning for avoided publishers: " + publishers.size());
-      
-      boolean isSelfPublished = false;
-      boolean isWebPublished  = false;
-      boolean isUnpublished   = false;
-      boolean isUnknown       = false;
-      
-      if (publishers.contains("(Self-published)")) {
-        isSelfPublished = true;
-        publishers.remove("(Self-published)");
-      }
-      if (publishers.contains("(Web published)")) {
-        isWebPublished = true;
-        publishers.remove("(Web published)");
-      }
-      if (publishers.contains("(Unpublished)")) {
-        isUnpublished = true;
-        publishers.remove("(Unpublished)");
-      }
-      if (publishers.contains("(Unknown)")) {
-        isUnknown = true;
-        publishers.remove("(Unknown)");
-      }
-
-      System.out.println ("  Size of publishers list after scanning for avoided publishers: " + publishers.size());
-      if (isSelfPublished) System.out.println ("    This game is self published!");
-      if (isWebPublished)  System.out.println ("    This game is web published!");
-      if (isUnpublished)   System.out.println ("    This game is unpublished!");
-      if (isUnknown)       System.out.println ("    This game is unknown!");
-
-      if (publishers.size() == 0) {
-        System.out.println ("!" + game.getName() + " has no only avoided publishers");
-        onlyAvoidPublished++;
-        continue;
-      }
-      if (publishers.size() == 1) {
-        System.out.println ("#" + game.getName() + " has just one publisher left after removing avoided ones!");
-        solvedWithAvoidHits++;
-        continue;
-      }
-      
-      int foundHits = 0;
-      for (String publisher : publishers) {
-        if (preferredList.contains(publisher)) {
-          foundHits++;
+      for (long csiID : csiIDs) {
+        BasicDBObject searchObject = new BasicDBObject("csiID", csiID);
+        cursor = csiCollection.find(searchObject);
+        CoolStuffIncPriceData data = null;
+        while (cursor.hasNext()) {
+          data = CSIDataConverter.convertMongoToCSI(cursor.next());
+        }
+        try { cursor.close(); } catch (Throwable t) {}
+        
+        if (data == null) {
+          System.out.println ("  CSI Entry " + csiID + " is not valid!");
+        } else {
+          newCSIs.add(csiID);
         }
       }
+      reltn.setCsiIDs(newCSIs);
       
-      if ((foundHits == 0) && (publishers.size() > 1))
-        noPreferredHits++;
-      if ((foundHits == 1) && (publishers.size() > 1))
-        onePreferredHit++;
-      if (foundHits >= 2)
-        twoPlusPreferredHits++;
-      
-      if (foundHits == 0) {
-        System.out.println ("-" + game.getName() + " has no preferred publishers");
-        System.out.print ("|");
-        for (String publisher : publishers) {
-          System.out.print (" " + publisher + " | ");
-        }
-        System.out.println ();
-      }
-      
-      if (foundHits == 1) {
-        System.out.println ("*" + game.getName() + " found one preferred publisher in the list of publishers!");
-      }
-      
-      if (foundHits >= 2) {
-        System.out.println ("+" + game.getName() + " has " + foundHits + " preferred publishers");
-        for (String publisher : publishers) {
-          if (preferredList.contains(publisher)) {
-            System.out.println ("  " + publisher);
-          }
-        }
+      if (newCSIs.size() < csiIDs.size()) {
+        System.out.println ("  Updating GameReltn entry to now have " + newCSIs.size() + " csiIDs mapped (was " + csiIDs.size() + ")");
+        reltnCollection.update(new BasicDBObject("reltnID", reltn.getReltnID()), GameReltnConverter.convertGameReltnToMongo(reltn));
       }
     }
     
-    System.out.println ("Total Number of Games Found: " + games.size());
-    System.out.println ("  Total with Only Avoided Publishers:    " + onlyAvoidPublished);
-    System.out.println ("  Total solved by removing Avoided Pubs: " + solvedWithAvoidHits);
-    System.out.println ("  Total with One Preferred Hit:          " + onePreferredHit);
-    System.out.println ("  Total with No Preferred Hits:          " + noPreferredHits);
-    System.out.println ("  Total with Two Or More Preferred Hits: " + twoPlusPreferredHits);
+    //Searching for all Reviewed CSI entries
+    BasicDBObject searchObject = new BasicDBObject("reviewState", 1);
+    cursor = csiCollection.find(searchObject);
+    List<CoolStuffIncPriceData> reviewedCSIs = new LinkedList<CoolStuffIncPriceData>();
+    while (cursor.hasNext()) {
+      reviewedCSIs.add(CSIDataConverter.convertMongoToCSI(cursor.next()));
+    }
+    try { cursor.close(); } catch (Throwable t) {}
+    
+    //Now we verify that every
+    count = 0;
+    for (CoolStuffIncPriceData data : reviewedCSIs) {
+      count++;
+      System.out.println ("[" + count + "/" + reviewedCSIs.size() + "] Processing CSI ID " + data.getCsiID());
+      
+      BasicDBList csiList = new BasicDBList();
+      csiList.add(data.getCsiID());
+      searchObject = new BasicDBObject("csiIDs", new BasicDBObject("$in", csiList));
+      
+      cursor = reltnCollection.find(searchObject);
+      GameReltn reltn = null;
+      while (cursor.hasNext()) {
+        reltn = GameReltnConverter.convertMongoToGameReltn(cursor.next());
+      }
+      try { cursor.close(); } catch (Throwable t) {}
 
+      if (reltn == null) {
+        System.out.println ("  This game is reviewed, but isn't mapped to a GameReltn!");
+        data.setReviewState(ReviewState.PENDING);
+        data.setReviewDate(null);
+        
+        System.out.println ("  !! Resetting CSI ID: " + data.getCsiID() + " - " + data.getTitle());
+        csiCollection.update(new BasicDBObject("csiID", data.getCsiID()), CSIDataConverter.convertCSIToMongo(data));
+      }
+    }
+    
     client.close();
     
     assertTrue("The world did not end", true);

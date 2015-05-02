@@ -11,7 +11,7 @@ import com.ac.games.db.exception.DatabaseOperationException;
  */
 public class BGGScheduledAgentThread extends Thread {
   
-  private final static long minRangeOffset = 100L;
+  private final static long minRangeOffset = 1000L;
   private final static long maxRangeOffset = 1000L;
   
   public BGGScheduledAgentThread() {

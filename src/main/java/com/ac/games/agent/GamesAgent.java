@@ -24,7 +24,7 @@ import com.ac.games.agent.thread.StatsThread;
  */
 public class GamesAgent {
 
-  public static String serverAddress = "http://localhost:8080/ac-games-restservice-spring-0.2.0-SNAPSHOT";
+  public static String serverAddress = "http://localhost:8080/ac-games-restservice-spring-1.0";
   
   public final static int FIRST_CSI_ENTRY = 75069;
   
@@ -36,7 +36,7 @@ public class GamesAgent {
    * @param args
    */
   public static void main(String[] args) {
-    serverAddress = "http://localhost:8080/ac-games-restservice-spring-0.3.0-SNAPSHOT";
+    serverAddress = "http://localhost:8080/ac-games-restservice-spring-1.0";
     //serverAddress = "http://localhost:8080";
     Date startDate = new Date();
     
